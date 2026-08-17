@@ -1,4 +1,4 @@
-# 3tiles<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -24,12 +24,6 @@
       user-select: none;
     }
 
-    /* スマホ版表示モード：全体を自動縮小してスクロール不要にする */
-    body.mobile-active {
-      overflow: hidden;
-      height: 100vh;
-    }
-
     .game-container {
       display: flex;
       gap: 18px;
@@ -37,19 +31,6 @@
       justify-content: center;
       max-width: 1320px;
       width: 100%;
-    }
-
-    /* スマホ表示モード：左右パネルとメインボードを縦に積んで見やすく */
-    .game-container.layout-mobile {
-      flex-direction: column;
-      align-items: center;
-      transform-origin: top center;
-    }
-
-    .game-container.layout-mobile .panel,
-    .game-container.layout-mobile .main-board {
-      width: 100%;
-      max-width: 462px;
     }
 
     .panel {
@@ -275,7 +256,7 @@
       margin-bottom: 2px;
     }
 
-    /* 作者クレジット：右下に小さく、丸文字でかわいく */
+    /* 作者クレジット：右下に小さく、丸文字でかわいく（タイトル画面用） */
     .credit-tag {
       position: absolute;
       right: 16px;
@@ -288,6 +269,46 @@
       padding: 3px 10px;
       border-radius: 999px;
       border: 1px solid #ffd9e4;
+    }
+
+    /* 作者クレジット：難易度選択画面の真下に、少し大きくかわいいフォントで */
+    .credit-tag-inline {
+      font-size: 17px;
+      font-weight: 900;
+      color: #ff8fab;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 0 #fff;
+    }
+
+    /* タイトル画面のイラストとタイトル文字 */
+    .title-illustration {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 3px solid #ffb6c1;
+      box-shadow: 0 6px 18px rgba(255, 182, 193, 0.4);
+    }
+
+    .title-illustration svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .title-main-text {
+      font-size: 34px;
+      font-weight: 900;
+      color: #ff5c8a;
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 0 #fff, 0 0 14px rgba(255, 182, 193, 0.7);
+      margin-top: 6px;
+    }
+
+    .title-start-btn {
+      font-size: 22px !important;
+      padding: 16px 52px !important;
+      margin-top: 8px;
     }
 
     .story-card {
@@ -460,22 +481,145 @@
     <canvas id="effect-canvas"></canvas>
     <div class="puzzle-grid" id="grid"></div>
 
-    <!-- 起動時の最初の画面：タイトル・作者名・表示モード選択のみ -->
-    <div class="start-overlay" id="landing-overlay">
-      <div class="overlay-title">🌲 森のパーティー 🌲</div>
+    <!-- 起動時の最初の画面：タイトルイラスト・タイトル名・はじめるボタン・作者名のみ -->
+    <div class="start-overlay" id="title-overlay">
+      <div class="title-illustration">
+        <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffd6e8"/>
+              <stop offset="55%" stop-color="#ffedc2"/>
+              <stop offset="100%" stop-color="#cdf3cf"/>
+            </linearGradient>
+            <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#a8e6a1"/>
+              <stop offset="100%" stop-color="#79c979"/>
+            </linearGradient>
+          </defs>
 
-      <div class="difficulty-select-area">
-        <div class="card-title" style="margin-bottom: 2px;">🖥️ 表示モードを選んでね</div>
-        <div class="difficulty-select">
-          <button class="diff-btn" id="layout-pc" onclick="chooseLayout('pc')">💻 PC版</button>
-          <button class="diff-btn" id="layout-mobile" onclick="chooseLayout('mobile')">📱 スマホ版</button>
-        </div>
+          <rect width="640" height="380" fill="url(#skyGrad)"/>
+          <circle cx="540" cy="65" r="48" fill="#fff3b0" opacity="0.75"/>
+
+          <g opacity="0.5">
+            <circle cx="60" cy="160" r="46" fill="#8fd39e"/>
+            <circle cx="120" cy="150" r="34" fill="#8fd39e"/>
+            <circle cx="560" cy="155" r="42" fill="#8fd39e"/>
+          </g>
+
+          <g>
+            <rect x="18" y="160" width="18" height="130" rx="7" fill="#c98d5c"/>
+            <circle cx="27" cy="132" r="52" fill="#5fbf6e"/>
+            <circle cx="4" cy="158" r="36" fill="#6fcf7e"/>
+            <circle cx="56" cy="152" r="38" fill="#6fcf7e"/>
+          </g>
+          <g>
+            <rect x="600" y="160" width="18" height="130" rx="7" fill="#c98d5c"/>
+            <circle cx="609" cy="132" r="52" fill="#5fbf6e"/>
+            <circle cx="586" cy="158" r="36" fill="#6fcf7e"/>
+            <circle cx="632" cy="152" r="38" fill="#6fcf7e"/>
+          </g>
+
+          <polyline points="65,108 320,82 575,108" fill="none" stroke="#ffb6c1" stroke-width="3"/>
+          <g fill="#ff9ac1">
+            <polygon points="120,110 134,110 127,127"/>
+            <polygon points="190,98 204,98 197,115"/>
+          </g>
+          <g fill="#ffe28a">
+            <polygon points="290,84 304,84 297,101"/>
+            <polygon points="360,86 374,86 367,103"/>
+          </g>
+          <g fill="#9fd8ff">
+            <polygon points="440,96 454,96 447,113"/>
+            <polygon points="500,102 514,102 507,119"/>
+          </g>
+
+          <rect x="0" y="270" width="640" height="110" fill="url(#grassGrad)"/>
+          <g fill="#ff9ac1">
+            <circle cx="80" cy="330" r="4"/>
+            <circle cx="560" cy="345" r="4"/>
+          </g>
+          <g fill="#ffe28a">
+            <circle cx="100" cy="322" r="4"/>
+            <circle cx="55" cy="352" r="4"/>
+            <circle cx="580" cy="315" r="4"/>
+          </g>
+
+          <!-- ピクニックテーブル -->
+          <g>
+            <ellipse cx="320" cy="278" rx="90" ry="16" fill="#fff2f6" stroke="#ffb6c1" stroke-width="2"/>
+            <rect x="270" y="288" width="12" height="42" fill="#a9744f"/>
+            <rect x="358" y="288" width="12" height="42" fill="#a9744f"/>
+            <circle cx="296" cy="270" r="13" fill="#ffd166"/>
+            <circle cx="296" cy="270" r="5" fill="#ff6b8b"/>
+            <circle cx="330" cy="273" r="11" fill="#ff8f8f"/>
+            <circle cx="358" cy="271" r="10" fill="#c9a0e0"/>
+            <rect x="342" y="258" width="10" height="16" rx="3" fill="#8fd8ff"/>
+          </g>
+
+          <!-- うさぎ -->
+          <g transform="translate(210,232)">
+            <ellipse cx="0" cy="46" rx="24" ry="28" fill="#ffffff" stroke="#ffb6c1" stroke-width="2.5"/>
+            <ellipse cx="0" cy="10" rx="18" ry="19" fill="#ffffff" stroke="#ffb6c1" stroke-width="2.5"/>
+            <ellipse cx="-9" cy="-18" rx="6" ry="18" fill="#ffffff" stroke="#ffb6c1" stroke-width="2.5"/>
+            <ellipse cx="9" cy="-18" rx="6" ry="18" fill="#ffffff" stroke="#ffb6c1" stroke-width="2.5"/>
+            <ellipse cx="-9" cy="-18" rx="2.6" ry="12" fill="#ffd1dc"/>
+            <ellipse cx="9" cy="-18" rx="2.6" ry="12" fill="#ffd1dc"/>
+            <circle cx="-6" cy="8" r="2.6" fill="#5a4632"/>
+            <circle cx="6" cy="8" r="2.6" fill="#5a4632"/>
+            <circle cx="-9" cy="16" r="3" fill="#ffb6c1" opacity="0.6"/>
+            <circle cx="9" cy="16" r="3" fill="#ffb6c1" opacity="0.6"/>
+            <path d="M-5 18 Q0 22 5 18" stroke="#5a4632" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <ellipse cx="22" cy="46" rx="7" ry="10" fill="#ffffff" stroke="#ffb6c1" stroke-width="2"/>
+          </g>
+
+          <!-- くま -->
+          <g transform="translate(320,215)">
+            <ellipse cx="0" cy="62" rx="30" ry="34" fill="#dba876" stroke="#8b5e34" stroke-width="2.5"/>
+            <path d="M-17 55 Q0 68 17 55 L15 88 Q0 96 -15 88 Z" fill="#8fc4e8"/>
+            <circle cx="-22" cy="6" r="14" fill="#c8996b" stroke="#8b5e34" stroke-width="2.5"/>
+            <circle cx="22" cy="6" r="14" fill="#c8996b" stroke="#8b5e34" stroke-width="2.5"/>
+            <circle cx="-22" cy="6" r="6.5" fill="#f2d9bd"/>
+            <circle cx="22" cy="6" r="6.5" fill="#f2d9bd"/>
+            <circle cx="0" cy="20" r="26" fill="#dba876" stroke="#8b5e34" stroke-width="2.5"/>
+            <ellipse cx="0" cy="26" rx="13" ry="10" fill="#fdf1e2"/>
+            <circle cx="-9" cy="15" r="3.4" fill="#3e2c1c"/>
+            <circle cx="9" cy="15" r="3.4" fill="#3e2c1c"/>
+            <circle cx="0" cy="23" r="2.4" fill="#3e2c1c"/>
+            <path d="M-6 30 Q0 34 6 30" stroke="#3e2c1c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <ellipse cx="-32" cy="42" rx="8" ry="7" fill="#dba876" stroke="#8b5e34" stroke-width="2"/>
+          </g>
+
+          <!-- りす -->
+          <g transform="translate(425,238)">
+            <ellipse cx="0" cy="44" rx="22" ry="26" fill="#e8bb90" stroke="#a9744f" stroke-width="2.5"/>
+            <circle cx="-18" cy="6" r="12" fill="#d3a27f" stroke="#a9744f" stroke-width="2.5"/>
+            <circle cx="18" cy="6" r="12" fill="#d3a27f" stroke="#a9744f" stroke-width="2.5"/>
+            <circle cx="-18" cy="6" r="5.5" fill="#fbe4cf"/>
+            <circle cx="18" cy="6" r="5.5" fill="#fbe4cf"/>
+            <circle cx="0" cy="16" r="21" fill="#e8bb90" stroke="#a9744f" stroke-width="2.5"/>
+            <ellipse cx="0" cy="22" rx="11" ry="8" fill="#fff6ec"/>
+            <circle cx="-7" cy="12" r="2.8" fill="#5a4632"/>
+            <circle cx="7" cy="12" r="2.8" fill="#5a4632"/>
+            <circle cx="0" cy="19" r="2" fill="#7a4a2f"/>
+            <path d="M28 -6 Q46 -2 40 26 Q34 44 16 40" fill="#e8bb90" stroke="#a9744f" stroke-width="2.5"/>
+          </g>
+
+          <g fill="#ffd166" opacity="0.9">
+            <polygon points="90,60 93,68 101,68 95,73 97,81 90,76 83,81 85,73 79,68 87,68"/>
+            <polygon points="500,180 502,186 508,186 503,190 505,196 500,192 495,196 497,190 492,186 498,186"/>
+            <polygon points="150,220 152,226 158,226 153,230 155,236 150,232 145,236 147,230 142,226 148,226"/>
+          </g>
+        </svg>
       </div>
 
-      <div class="credit-tag">✨ Flour shohei ✨</div>
+      <div class="title-main-text">🌲 森のパーティー 🌲</div>
+
+      <button class="btn title-start-btn" onclick="goToSetup()">▶ はじめる</button>
+
+      <div class="credit-tag">✨ Flour Shohei ✨</div>
     </div>
 
-    <!-- ストーリー＆スタート画面（表示モード選択後に表示） -->
+    <!-- ストーリー＆スタート画面（タイトル画面の「はじめる」を押した後に表示） -->
     <div class="start-overlay" id="start-overlay" style="display: none;">
       <div class="story-card">
         <div style="font-size: 32px;" id="story-avatar">📖🐰🍎</div>
@@ -506,6 +650,8 @@
           <button class="diff-btn" id="diff-hard" onclick="setGlobalDifficulty('hard')">🔥 むずかしい</button>
         </div>
       </div>
+
+      <div class="credit-tag-inline">✨ Flour Shohei ✨</div>
 
       <button class="btn" id="start-btn" onclick="startGame()" style="font-size: 18px; padding: 12px 30px;">🚀 このステージをはじめる！</button>
     </div>
@@ -542,7 +688,7 @@
 
     <div class="card">
       <div class="card-title">⭐ SCORE</div>
-      <div class="card-value"><span id="score">0</span><span style="font-size: 15px; color: #ff9aa2;"> / <span id="target-display">150</span></span></div>
+      <div class="card-value"><span id="score">0</span><span id="score-target-wrap" style="font-size: 15px; color: #ff9aa2; display: none;"> / <span id="target-display">150</span></span></div>
     </div>
 
     <div class="card">
@@ -573,7 +719,7 @@
       id: 1,
       title: "ステージ 1：森でくだもの集め",
       desc: "「森のみんなで盛大なパーティーを開くことになったよ！まずはみんなで食べるための新鮮なフルーツをたくさん集めよう！」",
-      targetScore: { easy: 60, normal: 90, hard: 130 },
+      targetScore: { easy: 30, normal: 50, hard: 70 },
       avatar: '📖🐰🍎🍇',
       mascotKey: 'rabbit',
       mascotStart: "フルーツを集めよう！"
@@ -582,7 +728,7 @@
       id: 2,
       title: "ステージ 2：きのみとジュース準備",
       desc: "「食材がたくさん集まったね！次は特製ジュースを作ったり、パーティー会場の飾り付けを進めよう！」",
-      targetScore: { easy: 140, normal: 200, hard: 280 },
+      targetScore: { easy: 70, normal: 110, hard: 150 },
       avatar: '📖🐿️🍹🌰',
       mascotKey: 'squirrel',
       mascotStart: "準備を完了させよう！"
@@ -591,7 +737,7 @@
       id: 3,
       title: "ステージ 3：みんなで大パーティー！",
       desc: "「いよいよ待ちに待ったパーティーの始まり！森中の動物たちを呼んで、最高の盛り上がりを見せよう！」",
-      targetScore: { easy: 240, normal: 340, hard: 440 },
+      targetScore: { easy: 120, normal: 180, hard: 240 },
       avatar: '📖🐻🎂🎉',
       mascotKey: 'bear',
       mascotStart: "達成で伝説のパーティーに！"
@@ -615,43 +761,12 @@
     updateStageUI();
   }
 
-  // PC版／スマホ版の表示レイアウトを切り替える
-  // 表示モードを選んで、ランディング画面 → ゲーム設定画面へ切り替える
-  function chooseLayout(mode) {
+  // タイトル画面の「はじめる」ボタンでゲーム設定画面へ切り替える
+  function goToSetup() {
     playCuteSE('click');
-    document.getElementById('layout-pc').classList.toggle('active', mode === 'pc');
-    document.getElementById('layout-mobile').classList.toggle('active', mode === 'mobile');
-
-    const container = document.querySelector('.game-container');
-    container.classList.toggle('layout-mobile', mode === 'mobile');
-    document.body.classList.toggle('mobile-active', mode === 'mobile');
-
-    document.getElementById('landing-overlay').style.display = 'none';
+    document.getElementById('title-overlay').style.display = 'none';
     document.getElementById('start-overlay').style.display = 'flex';
-
-    if (mode === 'mobile') {
-      requestAnimationFrame(fitMobileLayout);
-    } else {
-      container.style.transform = '';
-    }
   }
-
-  // スマホ版では、画面をスクロールしなくても収まるよう全体を自動で縮小表示する
-  function fitMobileLayout() {
-    const container = document.querySelector('.game-container');
-    if (!container.classList.contains('layout-mobile')) return;
-
-    container.style.transform = 'none';
-    const rect = container.getBoundingClientRect();
-    const availW = window.innerWidth - 16;
-    const availH = window.innerHeight - 16;
-    const scale = Math.min(availW / rect.width, availH / rect.height, 1);
-    container.style.transform = `scale(${scale})`;
-  }
-
-  window.addEventListener('resize', () => {
-    if (document.body.classList.contains('mobile-active')) fitMobileLayout();
-  });
 
   const allTileTypes = [
     { id: 0, type: 'tile-apple', icon: '🍎', color: '#ffb3ba' },
@@ -676,11 +791,11 @@
   }
 
   function getScoreMultiplier() {
-    // 目標スコアを2倍にしたのに合わせ、獲得倍率も引き締めて全体の難易度を底上げ
-    const baseMult = 0.05;
-    if (globalDifficulty === 'easy') return baseMult * 1.0;
-    if (globalDifficulty === 'normal') return baseMult * 0.9;
-    return baseMult * 0.8;
+    // 目標スコアを緩和し、獲得倍率も引き上げて全体的に簡単に調整
+    const baseMult = 0.08;
+    if (globalDifficulty === 'easy') return baseMult * 1.3;
+    if (globalDifficulty === 'normal') return baseMult * 1.1;
+    return baseMult * 1.0;
   }
 
   let board = [];
@@ -771,14 +886,15 @@
 
   function updateStageUI() {
     const startBtn = document.getElementById('start-btn');
+    const targetWrap = document.getElementById('score-target-wrap');
 
     if (gameMode === 'free') {
       document.getElementById('story-avatar').innerText = '🎲✨🏆';
       document.getElementById('story-title').innerText = 'フリーモード：スコアアタック！';
       document.getElementById('story-desc').innerText = '好きなむずかしさを選んで、自己ベストのハイスコア更新を目指そう！';
       document.getElementById('story-target').innerText = `🏆 現在のハイスコア: ${highScore.toLocaleString()} pt`;
-      document.getElementById('target-display').innerText = highScore.toLocaleString();
       startBtn.innerText = '🚀 フリーモードをはじめる！';
+      targetWrap.style.display = 'none';
       setMascotMessage('rabbit', `🎲 ハイスコア ${highScore.toLocaleString()}pt を超えよう！`);
       return;
     }
@@ -790,6 +906,7 @@
     const target = getCurrentTargetScore();
     document.getElementById('story-target').innerText = `🎯 目標スコア: ${target.toLocaleString()} pt`;
     document.getElementById('target-display').innerText = target.toLocaleString();
+    targetWrap.style.display = 'inline';
     startBtn.innerText = '🚀 このステージをはじめる！';
     setMascotMessage(stage.mascotKey, `🎯 ${target}pt集めよう！ ${stage.mascotStart}`);
   }
@@ -1381,7 +1498,14 @@
     document.getElementById('score').innerText = score;
     document.getElementById('cleared').innerText = clearedCount;
     document.getElementById('combo').innerText = 0;
-    document.getElementById('target-display').innerText = getCurrentTargetScore().toLocaleString();
+
+    const targetWrap = document.getElementById('score-target-wrap');
+    if (gameMode === 'free') {
+      targetWrap.style.display = 'none';
+    } else {
+      document.getElementById('target-display').innerText = getCurrentTargetScore().toLocaleString();
+      targetWrap.style.display = 'inline';
+    }
 
     initBoard();
     document.getElementById('start-overlay').style.display = 'none';
